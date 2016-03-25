@@ -92,11 +92,11 @@ module Baichuan
     end
 
     def cust_msg_push(cust_msg)
-      post( ACTION_CUSTMSG_PUSH, { custmsg: cust_msg } )
+      post( ACTION_CUSTMSG_PUSH, { custmsg: cust_msg.to_json } )
     end
 
     def im_msg_push(im_msg)
-      post( ACTION_IMMSG_PUSH, { immsg: im_msg } )
+      post( ACTION_IMMSG_PUSH, { immsg: im_msg.to_json } )
     end
 
     def add_users(userinfos)
