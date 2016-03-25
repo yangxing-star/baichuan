@@ -96,7 +96,7 @@ module Baichuan
     end
 
     def im_msg_push(im_msg)
-      post( ACTION_IMMSG_PUSH, { immsg: im_msg } )
+      post( ACTION_IMMSG_PUSH, im_msg )
     end
 
     def add_users(userinfos)
