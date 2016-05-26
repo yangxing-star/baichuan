@@ -10,6 +10,7 @@ module Baichuan
 
     ACTION_CUSTMSG_PUSH = 'taobao.openim.custmsg.push'
     ACTION_IMMSG_PUSH = 'taobao.openim.immsg.push'
+    ACTION_SEND_GROUP_MSG = 'taobao.openim.tribe.sendmsg'
 
     ACTION_GET_RELATIONS = 'taobao.openim.relations.get'
     ACTION_GET_CHATLOGS = 'taobao.openim.chatlogs.get'
@@ -115,81 +116,85 @@ module Baichuan
       post( ACTION_DELETE_USERS, { userids: user_ids.join(',') } )
     end
 
-    def get_relations(im_id, beg_date, end_date)
-      post( ACTION_GET_RELATIONS, { user: set_user(im_id), beg_date: beg_date, end_date: end_date })
+    def get_relations(user, beg_date, end_date)
+      post( ACTION_GET_RELATIONS, { user: user, beg_date: beg_date, end_date: end_date })
     end
 
-    def create_group(master_im_id, group_name, notice, members, tribe_type = 1)
-      post( ACTION_CREATE_GROUP, { user: set_user(master_im_id),
+    def send_group_msg(member, group_id, msg)
+      post( ACTION_SEND_GROUP_MSG, { user: member, tribe_id: group_id, msg: msg })
+    end
+
+    def create_group(master, group_name, notice, members, tribe_type = 1)
+      post( ACTION_CREATE_GROUP, { user: master,
                                    tribe_name: group_name,
                                    notice: notice,
-                                   members: set_members(members),
+                                   members: members,
                                    tribe_type: tribe_type
                                  }
           )
     end
 
-    def invite_group(master_im_id, group_id, members)
+    def invite_group(master, group_id, members)
       post( ACTION_INVITE_GROUP, { tribe_id: group_id,
-                                   user: set_user(master_im_id),
-                                   members: set_members(members)
+                                   user: master,
+                                   members: members
                                  }
           )
     end
 
-    def join_group(im_id, group_id)
-      post( ACTION_JOIN_GROUP, { user: set_user(im_id), tribe_id: group_id } )
+    def join_group(member, group_id)
+      post( ACTION_JOIN_GROUP, { user: member, tribe_id: group_id } )
     end
 
-    def expel_group(master_im_id, group_id, member)
+    def expel_group(master, group_id, member)
       post( ACTION_EXPEL_GROUP, { tribe_id: group_id,
-                                  user: set_user(master_im_id),
-                                  member: set_user(member)
+                                  user: master,
+                                  member: member
                                 }
           )
     end
 
-    def quit_group(im_id, group_id)
-      post( ACTION_QUIT_GROUP, { tribe_id: group_id, user: set_user(im_id) } )
+    def quit_group(member, group_id)
+      post( ACTION_QUIT_GROUP, { tribe_id: group_id, user: member } )
     end
 
-    def dismiss_group(master_im_id, group_id)
-      post( ACTION_DISMISS_GROUP, { tribe_id: group_id, user: set_user(master_im_id) } )
+    def dismiss_group(master, group_id)
+      post( ACTION_DISMISS_GROUP, { tribe_id: group_id, user: master } )
     end
 
-    def get_group(master_im_id, group_id)
-      post( ACTION_GET_GROUP, { tribe_id: group_id, user: set_user(master_im_id) } )
+    def get_group(master, group_id)
+      post( ACTION_GET_GROUP, { tribe_id: group_id, user: master } )
     end
 
-    def update_group(master_im_id, group_id, group_name, notice)
+    def update_group(master, group_id, group_name, notice)
       post( ACTION_UPDATE_GROUP, { tribe_id: group_id,
                                    tribe_name: group_name,
                                    notice: notice,
-                                   user: set_user(master_im_id)
+                                   user: master
                                  }
           )
     end
 
-    def set_manager(master_im_id, group_id, member_im_id)
-      post( ACTION_SET_MANAGER, { user: set_user(master_im_id), tid: group_id, member: set_user(member_im_id) } )
+    def set_manager(master, group_id, member)
+      post( ACTION_SET_MANAGER, { user: master, tid: group_id, member: member } )
     end
 
-    def unset_manager(master_im_id, group_id, member_im_id)
-      post( ACTION_UNSET_MANAGER, { user: set_user(master_im_id), tid: group_id, member: set_user(member_im_id) } )
+    def unset_manager(master, group_id, member)
+      post( ACTION_UNSET_MANAGER, { user: master, tid: group_id, member: member } )
     end
 
-    def get_members(im_id, group_id)
-      post( ACTION_GET_MEMBERS, { user: set_user(im_id), tribe_id: group_id } )
+    def get_members(member, group_id)
+      post( ACTION_GET_MEMBERS, { user: member, tribe_id: group_id } )
     end
 
-    def get_all_group(im_id, group_types = [0])
-      post( ACTION_GET_ALL_GROUP, { user: set_user(im_id), tribe_types: group_types } )
+    def get_all_group(user, group_types = [0])
+      post( ACTION_GET_ALL_GROUP, { user: user, tribe_types: group_types } )
     end
 
-    def set_member_nick(master_im_id, group_id, member_im_id, nick)
-      post( ACTION_SET_MEMBER_NICK, { user: set_user(master_im_id),
+    def set_member_nick(master, group_id, member, nick)
+      post( ACTION_SET_MEMBER_NICK, { user: master,
                                       tribe_id: group_id,
-                                      member: set_user(member_im_id),
+                                      member: member,
                                       nick: nick
                                     }
           )
@@ -217,16 +222,6 @@ module Baichuan
 
     def get_app_chat_logs(begin_time, end_time, count)
       post( ACTION_GET_APP_CHAT_LOGS, { beg: begin_time, end: end_time, count: count } )
-    end
-
-    private
-
-    def set_user(im_id)
-      { uid: im_id, app_key: @app_key, taobao_account: false }.to_json
-    end
-
-    def set_members(members)
-      members.map{ |im_id| { uid: im_id, app_key: @app_key, taobao_account: false } }.to_json
     end
   end
 end
