@@ -21,7 +21,7 @@ module Baichuan
     ACTION_INVITE_GROUP = 'taobao.openim.tribe.invite'
     ACTION_QUIT_GROUP = 'taobao.openim.tribe.quit'
     ACTION_EXPEL_GROUP = 'taobao.openim.tribe.expel'
-    ACTION_DISSMISS_GROUP = 'taobao.openim.tribe.dismiss'
+    ACTION_DISMISS_GROUP = 'taobao.openim.tribe.dismiss'
     ACTION_SET_MANAGER = 'taobao.openim.tribe.setmanager'
     ACTION_GET_MEMBERS = 'taobao.openim.tribe.getmembers'
     ACTION_UNSET_MANAGER = 'taobao.openim.tribe.unsetmanager'
@@ -146,9 +146,9 @@ module Baichuan
       post( ACTION_JOIN_GROUP, { user: member, tribe_id: group_id } )
     end
 
-    def expel_group(master, group_id, member)
+    def expel_group(user, group_id, member)
       post( ACTION_EXPEL_GROUP, { tribe_id: group_id,
-                                  user: master,
+                                  user: user,
                                   member: member
                                 }
           )
