@@ -71,7 +71,7 @@ module Baichuan
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = uri.scheme == 'https'
       http.ssl_version = :TLSv1
-      http.ciphers = ['RC4-SHA']
+      # http.ciphers = ['RC4-SHA']
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       req = Net::HTTP::Post.new(uri.path, initheader = header)
       req.body = URI.encode_www_form(data)
@@ -93,11 +93,11 @@ module Baichuan
     end
 
     def cust_msg_push(cust_msg)
-      post( ACTION_CUSTMSG_PUSH, { custmsg: cust_msg.to_json } )
+      post( ACTION_CUSTMSG_PUSH, { custmsg: cust_msg } )
     end
 
     def im_msg_push(im_msg)
-      post( ACTION_IMMSG_PUSH, { immsg: im_msg.to_json } )
+      post( ACTION_IMMSG_PUSH, { immsg: im_msg } )
     end
 
     def add_users(userinfos)
