@@ -183,7 +183,7 @@ module Baichuan
       post( ACTION_UNSET_MANAGER, { user: master, tid: group_id, member: member } )
     end
 
-    def get_members(member, group_id)
+    def get_group_members(member, group_id)
       post( ACTION_GET_MEMBERS, { user: member, tribe_id: group_id } )
     end
 
