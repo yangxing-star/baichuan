@@ -1,4 +1,5 @@
 require "baichuan/version"
+require "net/http"
 
 module Baichuan
   class Client
@@ -191,8 +192,8 @@ module Baichuan
       post( ACTION_GET_ALL_GROUP, { user: user, tribe_types: group_types } )
     end
 
-    def set_member_nick(master, group_id, member, nick)
-      post( ACTION_SET_MEMBER_NICK, { user: master,
+    def set_member_nick(user, group_id, member, nick)
+      post( ACTION_SET_MEMBER_NICK, { user: user,
                                       tribe_id: group_id,
                                       member: member,
                                       nick: nick
