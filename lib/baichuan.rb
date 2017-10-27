@@ -163,7 +163,7 @@ module Baichuan
       post( ACTION_DISMISS_GROUP, { tribe_id: group_id, user: master } )
     end
 
-    def get_group_membersp(master, group_id)
+    def get_group(master, group_id)
       post( ACTION_GET_GROUP, { tribe_id: group_id, user: master } )
     end
 
