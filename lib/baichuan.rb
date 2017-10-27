@@ -163,7 +163,7 @@ module Baichuan
       post( ACTION_DISMISS_GROUP, { tribe_id: group_id, user: master } )
     end
 
-    def get_group(master, group_id)
+    def get_group_membersp(master, group_id)
       post( ACTION_GET_GROUP, { tribe_id: group_id, user: master } )
     end
 
@@ -189,7 +189,7 @@ module Baichuan
     end
 
     def get_all_group(user, group_types = [0])
-      post( ACTION_GET_ALL_GROUP, { user: user, tribe_types: group_types } )
+      post( ACTION_GET_ALL_GROUPS, { user: user, tribe_types: group_types } )
     end
 
     def set_member_nick(user, group_id, member, nick)
